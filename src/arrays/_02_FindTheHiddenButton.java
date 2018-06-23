@@ -20,7 +20,7 @@ public class _02_FindTheHiddenButton implements ActionListener{
 	JPanel panel;
 	
 	//1. create an array of JButtons. Don't initialize it yet.
-	
+	JButton[] JButtonArray=new JButton[5];
 	//2 create an int variable called hiddenButton
 	
 	public static void main(String[] args) {
