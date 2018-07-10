@@ -62,7 +62,15 @@ public class _02_FindTheHiddenButton implements ActionListener{
 		//15. Use Thread.sleep(100); to pause the program.
 		//    Surround it with a try/catch
 		try {
-			Thread.sleep(500);
+			if (userNumber1>=15 && userNumber1<=100) {
+				Thread.sleep(500);
+			}
+			else if(userNumber1>=101) {
+				Thread.sleep(1000);
+			}
+			else {
+				Thread.sleep(250);
+			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
