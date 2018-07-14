@@ -24,10 +24,9 @@ boolean reachTop=false;
 //   a random amount less than 50.
 while(!reachTop) {
 for(int i=0; i<robotArray.length; i++) {
-	if(robotArray[i].getX()>=50) {
-	int j=ran.nextInt(200);
+	if(robotArray[i].getY()>=0) {
+	int j=ran.nextInt(100);
 	robotArray[i].move(j);
-	robotArray[i].turn(j/3);
 	}
 	else {
 		reachTop=true;
