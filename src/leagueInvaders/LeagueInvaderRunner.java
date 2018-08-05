@@ -1,13 +1,31 @@
 package leagueInvaders;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 
 public class LeagueInvaderRunner {
-	JFrame frame=new JFrame();
-	final int width=500;
-	final int hieght=800;
-public static void main(String[]args) {
-
+	GamePanel GP;
+	JFrame frame;
+	final int WIDTH=500;
+	final int HEIGHT=800;
 	
+public static void main(String[]args) {
+	
+LeagueInvaderRunner LIR=new LeagueInvaderRunner();
+	LIR.setup();
+}
+
+void setup() {
+	GP=new GamePanel();
+	frame=new JFrame();
+	frame.add(GP);
+	frame.addKeyListener(GP);
+	frame.setSize(WIDTH, HEIGHT);
+	frame.setVisible(true);
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
+    frame.pack();
+    GP.startGame();
 }
 }
