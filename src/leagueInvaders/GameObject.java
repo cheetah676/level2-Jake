@@ -1,5 +1,7 @@
 package leagueInvaders;
 
+import java.awt.Graphics;
+
 public class GameObject {
     int x;
     int y;
@@ -12,10 +14,11 @@ public class GameObject {
     	this.height=height;
     }
 	void update(){
-    	
+    	x+=50;
+    	y+=50;
     }
-    void draw(int x) {
-    	g.fillRect(10, 10, 100, 100);
+    void draw(Graphics g) {
+    	g.fillRect(x, y, 100, 100);
     }
 }
 
