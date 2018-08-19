@@ -10,7 +10,7 @@ public class LeagueInvaderRunner {
 	final static int WIDTH=500;
 	final static int HEIGHT=800;
 	
-public static void main(String[]args) {
+public static void main(String[] args) {
 	
 LeagueInvaderRunner LIR=new LeagueInvaderRunner();
 	LIR.setup();

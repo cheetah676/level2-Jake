@@ -16,14 +16,22 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	final int GAME_STATE = 1;
 	final int END_STATE = 2;
 	int currentState=MENU_STATE;
+	int enemiesKilled;
 	Font titleFont;
 	Font enter;
 	Font space;
+	Font gameOver;
+	Font enemies;
+	Font restart;
+	Rocketship ship=new Rocketship(250, 700, 50, 50);
 	Timer timer=new Timer(1000/60, this);
 GamePanel(){
-	titleFont=new Font("Arial", Font.PLAIN, 48);
+	titleFont=new Font("Arial", Font.BOLD, 48);
 	enter=new Font("Arial", Font.BOLD, 24);
 	space=new Font("Arial", Font.BOLD, 24);
+	gameOver=new Font("Arial", Font.BOLD, 48);
+	enemies=new Font("Arial", Font.BOLD, 24);
+	restart=new Font("Arial", Font.BOLD, 24);
 }
 	@Override
 	public void paintComponent(Graphics g){
@@ -58,7 +66,7 @@ GamePanel(){
 		
 	}
 	void updateGameState() {
-		
+		ship.update();
 	}
 	void updateEndState() {
 		
@@ -70,17 +78,25 @@ GamePanel(){
 		g.setFont(titleFont);
 		g.drawString("LEAGUE INVADERS", 25, 100);
 		g.setFont(enter);
-		g.drawString("Press ENTER to start", 100, 300);
+		g.drawString("Press ENTER to start", 130, 300);
 		g.setFont(space);
-		g.drawString("Press Space for instructions", 50, 500);
+		g.drawString("Press Space for instructions", 80, 500);
 	}
 	void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, LeagueInvaderRunner.WIDTH, LeagueInvaderRunner.HEIGHT);   	
+		g.fillRect(0, 0, LeagueInvaderRunner.WIDTH, LeagueInvaderRunner.HEIGHT);   
+		ship.draw(g);
 	}
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
-		g.fillRect(0, 0, LeagueInvaderRunner.WIDTH, LeagueInvaderRunner.HEIGHT);   
+		g.fillRect(0, 0, LeagueInvaderRunner.WIDTH, LeagueInvaderRunner.HEIGHT);
+		g.setColor(Color.BLACK);
+		g.setFont(gameOver);
+		g.drawString("Game Over", 100, 100);
+		g.setFont(enemies);
+		g.drawString("You killed " + enemiesKilled +" enemies", 125, 250);
+		g.setFont(restart);
+		g.drawString("Press enter to restart", 120, 400);
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {
