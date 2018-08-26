@@ -24,7 +24,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	Font enemies;
 	Font restart;
 	Rocketship ship=new Rocketship(250, 700, 50, 50);
-	Timer timer=new Timer(1000/60, this);
+	ObjectManager OM=new ObjectManager(ship);
+	Timer timer=new Timer(1000/60, this); 
+	boolean moveRight;
+	boolean moveLeft;
+	boolean moveUp;
+	boolean moveDown;
 GamePanel(){
 	titleFont=new Font("Arial", Font.BOLD, 48);
 	enter=new Font("Arial", Font.BOLD, 24);
@@ -58,6 +63,18 @@ GamePanel(){
 		   else if(currentState == END_STATE){
                updateEndState();
        }
+		   if(moveRight==true) {
+			   ship.x+=ship.speed;
+		   }
+		   if(moveLeft==true) {
+			   ship.x-=ship.speed;
+		   }
+		   if(moveUp==true) {
+			   ship.y-=ship.speed;
+		   }
+		   if(moveDown==true) {
+			   ship.y+=ship.speed;
+		   }
 	}
 	void startGame() {
 		timer.start();
@@ -66,7 +83,7 @@ GamePanel(){
 		
 	}
 	void updateGameState() {
-		ship.update();
+		OM.update();
 	}
 	void updateEndState() {
 		
@@ -85,7 +102,7 @@ GamePanel(){
 	void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, LeagueInvaderRunner.WIDTH, LeagueInvaderRunner.HEIGHT);   
-		ship.draw(g);
+		OM.draw(g);
 	}
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
@@ -118,10 +135,33 @@ GamePanel(){
             currentState = MENU_STATE;
         }
 		}
+		if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			moveRight=true;
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_LEFT) {
+			moveLeft=true;
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_UP) {
+			moveUp=true;
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+			moveDown=true;
+		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-
+		if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			moveRight=false;
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_LEFT) {
+			moveLeft=false;
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_UP) {
+			moveUp=false;
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+			moveDown=false;
+		}
 	}
 }
