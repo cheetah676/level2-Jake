@@ -118,7 +118,6 @@ GamePanel(){
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -147,6 +146,9 @@ GamePanel(){
 		else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
 			moveDown=true;
 		}
+		if(e.getKeyCode()==KeyEvent.VK_SPACE) {
+			OM.addProjectile(new Projectile(ship.x+20, ship.y+20, 10, 20));
+		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -163,5 +165,6 @@ GamePanel(){
 		else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
 			moveDown=false;
 		}
+		
 	}
 }
