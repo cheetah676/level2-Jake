@@ -13,6 +13,7 @@ public class Aliens extends GameObject {
 	}
 
 	void update() {
+		super.update();
 		if (x >= 500 - 50) {
 			y += 50;
 			speed = -5;
@@ -24,7 +25,6 @@ public class Aliens extends GameObject {
 	}
 
 	void draw(Graphics g) {
-		g.setColor(Color.YELLOW);
-		g.fillRect(x, y, width, height);
+		 g.drawImage(GamePanel.alienImg, x, y, width, height, null);
 	}
 }
