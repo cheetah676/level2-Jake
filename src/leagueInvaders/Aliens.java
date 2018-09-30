@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Aliens extends GameObject {
 	boolean right = true;
-	int speed = 5;
+	int speed = 10;
 
 	Aliens(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -16,16 +16,15 @@ public class Aliens extends GameObject {
 		super.update();
 		if (x >= 500 - 50) {
 			y += 50;
-			speed = -5;
+			speed = -10;
 		} else if (x <= 0) {
 			y += 50;
-			speed = 5;
+			speed = 10;
 		}
 		x += speed;
 	}
 
 	void draw(Graphics g) {
-		g.setColor(Color.YELLOW);
-		g.fillRect(x, y, width, height);
+        g.drawImage(GamePanel.alienImg, x, y, width, height, null);
 	}
 }
