@@ -46,23 +46,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		gameOver = new Font("Arial", Font.BOLD, 48);
 		enemies = new Font("Arial", Font.BOLD, 24);
 		restart = new Font("Arial", Font.BOLD, 24);
-        try {
-
-            alienImg = ImageIO.read(this.getClass().getResourceAsStream("alien.png"));
-
-            rocketImg = ImageIO.read(this.getClass().getResourceAsStream("rocket.png"));
-
-            bulletImg = ImageIO.read(this.getClass().getResourceAsStream("bullet.png"));
-
-            spaceImg = ImageIO.read(this.getClass().getResourceAsStream("space.png"));
-
-    } catch (IOException e) {
-
-            // TODO Auto-generated catch block
-
-            e.printStackTrace();
-
-    }
 	}
 
 	@Override
@@ -136,7 +119,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void drawGameState(Graphics g) {
-		 g.drawImage(GamePanel.spaceImg, 0, 0, LeagueInvaderRunner.WIDTH, LeagueInvaderRunner.HEIGHT, null);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, LeagueInvaderRunner.WIDTH, LeagueInvaderRunner.HEIGHT);
+		OM.draw(g);
+
 	}
 
 	void drawEndState(Graphics g) {
