@@ -24,6 +24,6 @@ public class GameObject {
 	}
 
 	void draw(Graphics g) {
-
+		
 	}
 }
