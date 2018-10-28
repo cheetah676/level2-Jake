@@ -22,6 +22,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	final int GAME_STATE=1;
 	final int END_STATE=2;
 	int currentState=MENU_STATE;
+	boolean drawTree=true;
+	boolean drawTree2=false;
 Timer timer=new Timer(1000/60, this);
 Font font;
 Font enter;
@@ -30,11 +32,13 @@ Font tax;
 Lorax lorax=new Lorax(250, 200, 100, 100);
 Tree tree=new Tree(220, 20, 200, 200);
 Rock rock=new Rock(350, 200, 200, 100);
-Tree2 tree2=new Tree2(1220, 300, 200, 200);
+Tree2 tree2=new Tree2(300, 100, 200, 200);
+TaxGuy taxGuy=new TaxGuy(400, 300, 200, 200);
 public static BufferedImage loraxImg;
 public static BufferedImage rockImg;
 public static BufferedImage treeImg;
 public static BufferedImage tree2Img;
+public static BufferedImage taxGuyImg;
 GamePanel(){
 	font=new Font("Arial", Font.PLAIN, 48);
 	enter=new Font("Arial", Font.PLAIN, 24);
@@ -45,6 +49,7 @@ GamePanel(){
         rockImg = ImageIO.read(this.getClass().getResourceAsStream("rock.png"));
         treeImg = ImageIO.read(this.getClass().getResourceAsStream("tree.png"));
         tree2Img = ImageIO.read(this.getClass().getResourceAsStream("tree2.png"));
+        taxGuyImg = ImageIO.read(this.getClass().getResourceAsStream("taxGuy.jpg"));
 } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -79,8 +84,14 @@ void drawGameState(Graphics g) {
 	g.setColor(Color.GREEN);
 	g.fillRect(0, 0, GameRunner.WIDTH, GameRunner.HEIGHT);
 	lorax.draw(g);
-	tree.draw(g);
 	rock.draw(g);
+	taxGuy.draw(g);
+	if(drawTree==true) {
+		tree.draw(g);
+	}
+	if(drawTree2==true) {
+		tree2.draw(g);
+	}
 }
 void drawEndState(Graphics g) {
 	g.setColor(Color.RED);
@@ -136,13 +147,17 @@ public void keyPressed(KeyEvent e) {
 			currentState = MENU_STATE;
 		}
 	}
-	if(e.getKeyCode()==KeyEvent.VK_SPACE) {
-		
+	else if (e.getKeyCode()==KeyEvent.VK_SPACE) {
+		drawTree=false;
+		drawTree2=true;
 	}
 }
 @Override
 public void keyReleased(KeyEvent e) {
 	// TODO Auto-generated method stub
-
+	if (e.getKeyCode()==KeyEvent.VK_SPACE) {
+		drawTree=true;
+		drawTree2=false;
+	}
 }
 }
