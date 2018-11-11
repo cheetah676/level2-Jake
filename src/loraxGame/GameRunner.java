@@ -4,10 +4,10 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 public class GameRunner {
-	JFrame frame;
+	static JFrame frame;
 	final static int WIDTH=800;
 	final static int HEIGHT=500;
-	GamePanel GP;
+	static GamePanel GP;
 	public static void main(String[]args) {
 		GameRunner GR=new GameRunner();
 		GR.run();

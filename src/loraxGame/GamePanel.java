@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -32,21 +33,30 @@ long taxTimer=0;
 long otherTimer=0;
 long idkTimer=0;
 int taxGuyVisit=15000;
-int taxGuyLeave=18000;
 int second=1000;
-int i=15;
+int i=16;
+int score=50;
+int taxAmount=45;
+int addedScore=1;
+JButton moreProduction;
+int moreProductionPrice=100;
+JButton autoClicker;
+boolean auto=false;
+JButton doubleTrees;
+
 Font font;
 Font enter;
 Font space;
-Font tax;
+Font taxText;
 Font nextTax;
+Font showScore;
 Lorax lorax=new Lorax(250, 200, 100, 100);
 Tree tree=new Tree(220, 20, 200, 200);
 Rock rock=new Rock(350, 200, 200, 100);
 Tree2 tree2=new Tree2(300, 100, 200, 200);
 TaxGuy taxGuy=new TaxGuy(800, 300, 200, 200);
 public static BufferedImage loraxImg;
-public static BufferedImage rockImg;
+public static BufferedImage rockImg;              
 public static BufferedImage treeImg;
 public static BufferedImage tree2Img;
 public static BufferedImage taxGuyImg;
@@ -54,7 +64,7 @@ GamePanel(){
 	font=new Font("Arial", Font.PLAIN, 48);
 	enter=new Font("Arial", Font.PLAIN, 24);
 	space=new Font("Arial", Font.PLAIN, 24);
-	tax=new Font("Arial", Font.PLAIN, 24);
+	taxText=new Font("Arial", Font.PLAIN, 24);
 	nextTax=new Font("Arial", Font.PLAIN, 24);
     try {
         loraxImg = ImageIO.read(this.getClass().getResourceAsStream("lorax.png"));
@@ -81,9 +91,11 @@ void updateGameState() {
 		taxGuy.x-=200;
 		taxTimer = System.currentTimeMillis();
 	}
-	if (System.currentTimeMillis() - otherTimer >= taxGuyLeave) {
+	if (System.currentTimeMillis() - otherTimer >= taxGuyVisit+3000) {
 		taxGuy.x+=200;
-		otherTimer = System.currentTimeMillis();
+		otherTimer = taxTimer;
+		score-=taxAmount;
+		taxAmount+=5;
 	}
 }
 void updateEndState(){
@@ -101,6 +113,15 @@ void drawMenuState(Graphics g) {
 	g.drawString("Press H for instructions", 240, 400);
 }
 void drawGameState(Graphics g) {
+	autoClicker=new JButton();
+	doubleTrees=new JButton();
+	moreProduction=new JButton();
+	GameRunner.GP.add(autoClicker);
+	GameRunner.GP.add(doubleTrees);
+	GameRunner.GP.add(moreProduction);
+	moreProduction.addActionListener(this);
+	autoClicker.addActionListener(this);
+	doubleTrees.addActionListener(this);
 	g.setColor(Color.GREEN);
 	g.fillRect(0, 0, GameRunner.WIDTH, GameRunner.HEIGHT);
 	lorax.draw(g);
@@ -115,18 +136,25 @@ void drawGameState(Graphics g) {
 	if (System.currentTimeMillis() - idkTimer >=1000) {
 		i-=1;
 idkTimer=System.currentTimeMillis();
+if(auto==true) {
+	score+=1;
+}
 	}
 	g.setColor(Color.BLUE);
 	g.setFont(nextTax);
-	g.drawString("Next tax come in " +i+ " seconds", 50, 50);
-		if(i<0) {
+	g.drawString("Next tax come in " +i+ " seconds", 20, 50);
+		if(i<=0) {
 			i=15;
 		}
+		g.setFont(showScore);
+		g.setColor(Color.BLACK);
+		g.drawString("Score:"+score, 20, 450);
+		
 }
 void drawEndState(Graphics g) {
 	g.setColor(Color.RED);
 	g.fillRect(0, 0, GameRunner.WIDTH, GameRunner.HEIGHT);
-	g.setFont(tax);
+	g.setFont(taxText);
 	g.setColor(Color.BLACK);
 	g.drawString("You became broke due to taxes, and died.", 150, 200);
 }
@@ -158,7 +186,16 @@ public void actionPerformed(ActionEvent e) {
         updateEndState();
 }
 	repaint();
-}
+		if(e.getSource()==moreProduction) {
+			addedScore+=1;
+			score-=moreProductionPrice;
+			moreProductionPrice+=10;
+		}
+		else if(e.getSource()==autoClicker) {
+			auto=true;
+		}
+	}
+
 @Override
 public void keyTyped(KeyEvent e) {
 	// TODO Auto-generated method stub
@@ -188,6 +225,7 @@ public void keyReleased(KeyEvent e) {
 	if (e.getKeyCode()==KeyEvent.VK_SPACE) {
 		drawTree=true;
 		drawTree2=false;
+		score+=addedScore;
 	}
 }
 }
