@@ -13,6 +13,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -35,15 +36,14 @@ long idkTimer=0;
 int taxGuyVisit=15000;
 int second=1000;
 int i=16;
-int score=50;
+int score=45;
 int taxAmount=45;
 int addedScore=1;
-JButton moreProduction;
-int moreProductionPrice=100;
-JButton autoClicker;
-boolean auto=false;
-JButton doubleTrees;
-
+int moreProductionPrice=50;
+int auto=0;
+int autoPrice=30;
+boolean doubleTree=false;
+int doubleTreePrice=200;
 Font font;
 Font enter;
 Font space;
@@ -96,10 +96,13 @@ void updateGameState() {
 		otherTimer = taxTimer;
 		score-=taxAmount;
 		taxAmount+=5;
+		if(score<0) {
+			currentState=END_STATE;
+		}
 	}
 }
 void updateEndState(){
-	
+	score=0;
 }
 void drawMenuState(Graphics g) {
 	g.setColor(Color.BLUE);
@@ -113,15 +116,7 @@ void drawMenuState(Graphics g) {
 	g.drawString("Press H for instructions", 240, 400);
 }
 void drawGameState(Graphics g) {
-	autoClicker=new JButton();
-	doubleTrees=new JButton();
-	moreProduction=new JButton();
-	GameRunner.GP.add(autoClicker);
-	GameRunner.GP.add(doubleTrees);
-	GameRunner.GP.add(moreProduction);
-	moreProduction.addActionListener(this);
-	autoClicker.addActionListener(this);
-	doubleTrees.addActionListener(this);
+	GameRunner.frame.pack();
 	g.setColor(Color.GREEN);
 	g.fillRect(0, 0, GameRunner.WIDTH, GameRunner.HEIGHT);
 	lorax.draw(g);
@@ -135,10 +130,8 @@ void drawGameState(Graphics g) {
 	}
 	if (System.currentTimeMillis() - idkTimer >=1000) {
 		i-=1;
+		score+=auto;
 idkTimer=System.currentTimeMillis();
-if(auto==true) {
-	score+=1;
-}
 	}
 	g.setColor(Color.BLUE);
 	g.setFont(nextTax);
@@ -186,14 +179,6 @@ public void actionPerformed(ActionEvent e) {
         updateEndState();
 }
 	repaint();
-		if(e.getSource()==moreProduction) {
-			addedScore+=1;
-			score-=moreProductionPrice;
-			moreProductionPrice+=10;
-		}
-		else if(e.getSource()==autoClicker) {
-			auto=true;
-		}
 	}
 
 @Override
@@ -207,14 +192,12 @@ public void keyPressed(KeyEvent e) {
 	if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 		if (currentState == MENU_STATE) {
 			currentState = GAME_STATE;
-		} else if (currentState == GAME_STATE) {
-			currentState = END_STATE;
 		}
 		else if (currentState == END_STATE) {
 			currentState = MENU_STATE;
 		}
 	}
-	else if (e.getKeyCode()==KeyEvent.VK_SPACE) {
+	else if (e.getKeyCode()==KeyEvent.VK_C) {
 		drawTree=false;
 		drawTree2=true;
 	}
@@ -222,10 +205,30 @@ public void keyPressed(KeyEvent e) {
 @Override
 public void keyReleased(KeyEvent e) {
 	// TODO Auto-generated method stub
-	if (e.getKeyCode()==KeyEvent.VK_SPACE) {
+	if (e.getKeyCode()==KeyEvent.VK_C) {
 		drawTree=true;
 		drawTree2=false;
 		score+=addedScore;
+	}
+	else if(e.getKeyCode()==KeyEvent.VK_A) {
+		auto+=1;
+		score-=autoPrice;
+		autoPrice+=10;
+	}
+	else if(e.getKeyCode()==KeyEvent.VK_P) {
+		addedScore+=1;
+		score-=moreProductionPrice;
+		moreProductionPrice+=10;
+	}
+	else if(e.getKeyCode()==KeyEvent.VK_D) {
+		if(doubleTree==false) {
+		addedScore*=2;
+		doubleTree=true;
+		score-=doubleTreePrice;
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "You already have double trees");
+		}
 	}
 }
 }
