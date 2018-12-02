@@ -21,7 +21,6 @@ frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 frame.setSize(WIDTH, HEIGHT);
 frame.setVisible(true);
 frame.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
-frame.pack();
 GP.startGame();
 	}
 }

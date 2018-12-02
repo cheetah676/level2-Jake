@@ -46,10 +46,14 @@ boolean doubleTree=false;
 int doubleTreePrice=200;
 Font font;
 Font enter;
-Font space;
+Font H;
 Font taxText;
 Font nextTax;
 Font showScore;
+Font upgradeA;
+Font upgradeP;
+Font upgradeD;
+Font D;
 Lorax lorax=new Lorax(250, 200, 100, 100);
 Tree tree=new Tree(220, 20, 200, 200);
 Rock rock=new Rock(350, 200, 200, 100);
@@ -60,18 +64,26 @@ public static BufferedImage rockImg;
 public static BufferedImage treeImg;
 public static BufferedImage tree2Img;
 public static BufferedImage taxGuyImg;
+public static BufferedImage doubleTreeImg;
+public static BufferedImage doubleTree2Img;
 GamePanel(){
 	font=new Font("Arial", Font.PLAIN, 48);
 	enter=new Font("Arial", Font.PLAIN, 24);
-	space=new Font("Arial", Font.PLAIN, 24);
+	H=new Font("Arial", Font.PLAIN, 24);
 	taxText=new Font("Arial", Font.PLAIN, 24);
 	nextTax=new Font("Arial", Font.PLAIN, 24);
+	upgradeA=new Font("Arial", Font.BOLD, 14);
+	upgradeP=new Font("Arial", Font.BOLD, 14);
+	upgradeD=new Font("Arial", Font.BOLD, 14);
+	D=new Font("Arial", Font.BOLD, 14);
     try {
         loraxImg = ImageIO.read(this.getClass().getResourceAsStream("lorax.png"));
         rockImg = ImageIO.read(this.getClass().getResourceAsStream("rock.png"));
         treeImg = ImageIO.read(this.getClass().getResourceAsStream("tree.png"));
         tree2Img = ImageIO.read(this.getClass().getResourceAsStream("tree2.png"));
         taxGuyImg = ImageIO.read(this.getClass().getResourceAsStream("taxGuy.png"));
+        doubleTreeImg = ImageIO.read(this.getClass().getResourceAsStream("doubletree.png"));
+        doubleTree2Img = ImageIO.read(this.getClass().getResourceAsStream("doubletree2.png"));
 } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -102,7 +114,7 @@ void updateGameState() {
 	}
 }
 void updateEndState(){
-	score=0;
+	
 }
 void drawMenuState(Graphics g) {
 	g.setColor(Color.BLUE);
@@ -112,7 +124,7 @@ void drawMenuState(Graphics g) {
 	g.drawString("Lorax Game", 250, 100);
 	g.setFont(enter);
 	g.drawString("Press ENTER to start", 265, 250);
-	g.setFont(space);
+	g.setFont(H);
 	g.drawString("Press H for instructions", 240, 400);
 }
 void drawGameState(Graphics g) {
@@ -142,7 +154,14 @@ idkTimer=System.currentTimeMillis();
 		g.setFont(showScore);
 		g.setColor(Color.BLACK);
 		g.drawString("Score:"+score, 20, 450);
-		
+		g.setFont(upgradeA);
+		g.drawString("Press A to add an auto clicker", 500, 20);
+		g.setFont(upgradeP);
+		g.drawString("Press P to get more materials per whack", 500, 70);
+		g.setFont(upgradeD);
+		g.drawString("Press D to double production per whack", 500, 130);
+		g.setFont(D);
+		g.drawString("D is a one time upgrade and only doubles current, not future porduction", 100, 350);
 }
 void drawEndState(Graphics g) {
 	g.setColor(Color.RED);
@@ -164,6 +183,14 @@ drawGameState(g);
 }
 else if(currentState == END_STATE){
 drawEndState(g);
+score=0;
+taxAmount=45;
+addedScore=1;
+moreProductionPrice=50;
+auto=0;
+autoPrice=30;
+doubleTreePrice=200;
+
 }
 }
 @Override
@@ -197,15 +224,18 @@ public void keyPressed(KeyEvent e) {
 			currentState = MENU_STATE;
 		}
 	}
-	else if (e.getKeyCode()==KeyEvent.VK_C) {
+	else if (e.getKeyCode()==KeyEvent.VK_SPACE) {
 		drawTree=false;
 		drawTree2=true;
+	}
+	else if(e.getKeyCode()==KeyEvent.VK_H) {
+		JOptionPane.showMessageDialog(null, "Press Space to mine the rock, and upgrade your whacking power with upgrades shown on the next screen.  Do not become broke due to taxes, or you lose.");
 	}
 }
 @Override
 public void keyReleased(KeyEvent e) {
 	// TODO Auto-generated method stub
-	if (e.getKeyCode()==KeyEvent.VK_C) {
+	if (e.getKeyCode()==KeyEvent.VK_SPACE) {
 		drawTree=true;
 		drawTree2=false;
 		score+=addedScore;

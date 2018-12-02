@@ -157,7 +157,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-	}
+		}
+	
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -184,6 +185,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			moveDown = true;
 		}
+		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			OM.addProjectile(new Projectile(ship.x + 20, ship.y + 20, 10, 20));
+		}            
 	}
 
 	@Override
@@ -197,8 +201,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			moveUp = false;
 		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			moveDown = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			OM.addProjectile(new Projectile(ship.x + 20, ship.y + 20, 10, 20));
-		}
+		} 
 	}
 }
