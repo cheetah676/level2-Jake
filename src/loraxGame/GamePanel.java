@@ -26,6 +26,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	final int MENU_STATE=0;
 	final int GAME_STATE=1;
 	final int END_STATE=2;
+	final int WIN_STATE=3;
 	int currentState=MENU_STATE;
 	boolean drawTree=true;
 	boolean drawTree2=false;
@@ -59,13 +60,15 @@ Tree tree=new Tree(220, 20, 200, 200);
 Rock rock=new Rock(350, 200, 200, 100);
 Tree2 tree2=new Tree2(300, 100, 200, 200);
 TaxGuy taxGuy=new TaxGuy(800, 300, 200, 200);
+DoubleTree doubletree=new DoubleTree(170, 20, 200, 200);
+DoubleTree2 doubletree2=new DoubleTree2(300, 50, 200, 200);
 public static BufferedImage loraxImg;
 public static BufferedImage rockImg;              
 public static BufferedImage treeImg;
 public static BufferedImage tree2Img;
 public static BufferedImage taxGuyImg;
-public static BufferedImage doubleTreeImg;
-public static BufferedImage doubleTree2Img;
+public static BufferedImage doubletreeImg;
+public static BufferedImage doubletree2Img;
 GamePanel(){
 	font=new Font("Arial", Font.PLAIN, 48);
 	enter=new Font("Arial", Font.PLAIN, 24);
@@ -82,8 +85,8 @@ GamePanel(){
         treeImg = ImageIO.read(this.getClass().getResourceAsStream("tree.png"));
         tree2Img = ImageIO.read(this.getClass().getResourceAsStream("tree2.png"));
         taxGuyImg = ImageIO.read(this.getClass().getResourceAsStream("taxGuy.png"));
-        doubleTreeImg = ImageIO.read(this.getClass().getResourceAsStream("doubletree.png"));
-        doubleTree2Img = ImageIO.read(this.getClass().getResourceAsStream("doubletree2.png"));
+        doubletreeImg = ImageIO.read(this.getClass().getResourceAsStream("doubletree.png"));
+        doubletree2Img = ImageIO.read(this.getClass().getResourceAsStream("doubletree2.png"));
 } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -99,19 +102,6 @@ void updateGameState() {
 	tree.update();
 	rock.update();
 	tree2.update();
-	if (System.currentTimeMillis() - taxTimer >= taxGuyVisit) {
-		taxGuy.x-=200;
-		taxTimer = System.currentTimeMillis();
-	}
-	if (System.currentTimeMillis() - otherTimer >= taxGuyVisit+3000) {
-		taxGuy.x+=200;
-		otherTimer = taxTimer;
-		score-=taxAmount;
-		taxAmount+=5;
-		if(score<0) {
-			currentState=END_STATE;
-		}
-	}
 }
 void updateEndState(){
 	
@@ -136,14 +126,33 @@ void drawGameState(Graphics g) {
 	taxGuy.draw(g);
 	if(drawTree==true) {
 		tree.draw(g);
+		if(doubleTree==true) {
+			doubletree.draw(g);
+		}
 	}
 	if(drawTree2==true) {
 		tree2.draw(g);
+		if(doubleTree==true) {
+			doubletree2.draw(g);
+		}
 	}
 	if (System.currentTimeMillis() - idkTimer >=1000) {
 		i-=1;
 		score+=auto;
 idkTimer=System.currentTimeMillis();
+if (System.currentTimeMillis() - taxTimer >= taxGuyVisit) {
+	taxGuy.x-=200;
+	taxTimer = System.currentTimeMillis();
+}
+if (System.currentTimeMillis() - otherTimer >= taxGuyVisit+3000) {
+	taxGuy.x+=200;
+	otherTimer = taxTimer;
+	score-=taxAmount;
+	taxAmount+=5;
+	if(score<0) {
+		currentState=END_STATE;
+	}
+}
 	}
 	g.setColor(Color.BLUE);
 	g.setFont(nextTax);
@@ -162,6 +171,11 @@ idkTimer=System.currentTimeMillis();
 		g.drawString("Press D to double production per whack", 500, 130);
 		g.setFont(D);
 		g.drawString("D is a one time upgrade and only doubles current, not future porduction", 100, 350);
+		if(score>=50000) {
+			JOptionPane.showMessageDialog(null, "You win.  You are the god of lorax clicker");
+			currentState=WIN_STATE;
+			
+		}
 }
 void drawEndState(Graphics g) {
 	g.setColor(Color.RED);
@@ -183,14 +197,17 @@ drawGameState(g);
 }
 else if(currentState == END_STATE){
 drawEndState(g);
-score=0;
+score=45;
 taxAmount=45;
 addedScore=1;
 moreProductionPrice=50;
 auto=0;
 autoPrice=30;
 doubleTreePrice=200;
-
+doubleTree=false;
+taxTimer=0;
+otherTimer=0;
+idkTimer=0;
 }
 }
 @Override
