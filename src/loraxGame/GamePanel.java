@@ -55,6 +55,7 @@ Font upgradeA;
 Font upgradeP;
 Font upgradeD;
 Font D;
+Font win;
 Lorax lorax=new Lorax(250, 200, 100, 100);
 Tree tree=new Tree(220, 20, 200, 200);
 Rock rock=new Rock(350, 200, 200, 100);
@@ -79,6 +80,7 @@ GamePanel(){
 	upgradeP=new Font("Arial", Font.BOLD, 14);
 	upgradeD=new Font("Arial", Font.BOLD, 14);
 	D=new Font("Arial", Font.BOLD, 14);
+	win=new Font("Arial", Font.BOLD, 24);
     try {
         loraxImg = ImageIO.read(this.getClass().getResourceAsStream("lorax.png"));
         rockImg = ImageIO.read(this.getClass().getResourceAsStream("rock.png"));
@@ -164,17 +166,16 @@ if (System.currentTimeMillis() - otherTimer >= taxGuyVisit+3000) {
 		g.setColor(Color.BLACK);
 		g.drawString("Score:"+score, 20, 450);
 		g.setFont(upgradeA);
-		g.drawString("Press A to add an auto clicker", 500, 20);
+		g.drawString("Press A to add an auto clicker-"+autoPrice, 490, 20);
 		g.setFont(upgradeP);
-		g.drawString("Press P to get more materials per whack", 500, 70);
+		g.drawString("Press P to get more materials per whack-"+moreProductionPrice, 490, 70);
 		g.setFont(upgradeD);
-		g.drawString("Press D to double production per whack", 500, 130);
+		g.drawString("Press D to double production per whack-"+doubleTreePrice, 490, 130);
 		g.setFont(D);
-		g.drawString("D is a one time upgrade and only doubles current, not future porduction", 100, 350);
+		g.drawString("D is a one time upgrade and only doubles current, not future production", 100, 350);
 		if(score>=50000) {
 			JOptionPane.showMessageDialog(null, "You win.  You are the god of lorax clicker");
 			currentState=WIN_STATE;
-			
 		}
 }
 void drawEndState(Graphics g) {
@@ -183,6 +184,13 @@ void drawEndState(Graphics g) {
 	g.setFont(taxText);
 	g.setColor(Color.BLACK);
 	g.drawString("You became broke due to taxes, and died.", 150, 200);
+}
+void drawWinState(Graphics g) {
+	g.setColor(Color.YELLOW);
+	g.fillRect(0, 0, GameRunner.WIDTH, GameRunner.HEIGHT);
+	g.setFont(win);
+	g.setColor(Color.BLACK);
+	g.drawString("Winner Winner Chicken Dinner", 150, 200);
 }
 void startGame() {
 	timer.start();
@@ -208,6 +216,11 @@ doubleTree=false;
 taxTimer=0;
 otherTimer=0;
 idkTimer=0;
+i=16;
+taxGuyVisit=15000;
+}
+else if(currentState==WIN_STATE) {
+	drawWinState(g);
 }
 }
 @Override
@@ -228,7 +241,6 @@ public void actionPerformed(ActionEvent e) {
 @Override
 public void keyTyped(KeyEvent e) {
 	// TODO Auto-generated method stub
-
 }
 @Override
 public void keyPressed(KeyEvent e) {
@@ -237,10 +249,13 @@ public void keyPressed(KeyEvent e) {
 		if (currentState == MENU_STATE) {
 			currentState = GAME_STATE;
 		}
+		}
+	else if(e.getKeyCode()==KeyEvent.VK_BACK_SLASH) {
+		score+=1000;
+	}
 		else if (currentState == END_STATE) {
 			currentState = MENU_STATE;
 		}
-	}
 	else if (e.getKeyCode()==KeyEvent.VK_SPACE) {
 		drawTree=false;
 		drawTree2=true;
