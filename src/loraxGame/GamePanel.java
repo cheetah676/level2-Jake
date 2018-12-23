@@ -1,5 +1,6 @@
 package loraxGame;
 
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,6 +25,7 @@ import leagueInvaders.ObjectManager;
 import leagueInvaders.Rocketship;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener{
+	AudioClip sound = JApplet.newAudioClip(getClass().getResource("pow.wav"));
 	final int MENU_STATE=0;
 	final int GAME_STATE=1;
 	final int END_STATE=2;
@@ -30,6 +33,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	int currentState=MENU_STATE;
 	boolean drawTree=true;
 	boolean drawTree2=false;
+	boolean message=false;
 Timer timer=new Timer(1000/60, this);
 long taxTimer=0;
 long otherTimer=0;
@@ -63,6 +67,7 @@ Tree2 tree2=new Tree2(300, 100, 200, 200);
 TaxGuy taxGuy=new TaxGuy(800, 300, 200, 200);
 DoubleTree doubletree=new DoubleTree(170, 20, 200, 200);
 DoubleTree2 doubletree2=new DoubleTree2(300, 50, 200, 200);
+SuperLorax superLorax=new SuperLorax(200, 95, 400, 400);
 public static BufferedImage loraxImg;
 public static BufferedImage rockImg;              
 public static BufferedImage treeImg;
@@ -70,6 +75,7 @@ public static BufferedImage tree2Img;
 public static BufferedImage taxGuyImg;
 public static BufferedImage doubletreeImg;
 public static BufferedImage doubletree2Img;
+public static BufferedImage SuperLoraxImg;
 GamePanel(){
 	font=new Font("Arial", Font.PLAIN, 48);
 	enter=new Font("Arial", Font.PLAIN, 24);
@@ -89,6 +95,7 @@ GamePanel(){
         taxGuyImg = ImageIO.read(this.getClass().getResourceAsStream("taxGuy.png"));
         doubletreeImg = ImageIO.read(this.getClass().getResourceAsStream("doubletree.png"));
         doubletree2Img = ImageIO.read(this.getClass().getResourceAsStream("doubletree2.png"));
+        SuperLoraxImg = ImageIO.read(this.getClass().getResourceAsStream("SuperLorax.jpg"));
 } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
@@ -121,6 +128,13 @@ void drawMenuState(Graphics g) {
 }
 void drawGameState(Graphics g) {
 	GameRunner.frame.pack();
+	if(message==false) {
+	if(score>=50000) {
+		System.out.println("You win. You are the god of Lorax Clicker");
+		message=true;
+		currentState=WIN_STATE;
+	}
+	}
 	g.setColor(Color.GREEN);
 	g.fillRect(0, 0, GameRunner.WIDTH, GameRunner.HEIGHT);
 	lorax.draw(g);
@@ -173,11 +187,8 @@ if (System.currentTimeMillis() - otherTimer >= taxGuyVisit+3000) {
 		g.drawString("Press D to double production per whack-"+doubleTreePrice, 490, 130);
 		g.setFont(D);
 		g.drawString("D is a one time upgrade and only doubles current, not future production", 100, 350);
-		if(score>=50000) {
-			JOptionPane.showMessageDialog(null, "You win.  You are the god of lorax clicker");
-			currentState=WIN_STATE;
 		}
-}
+
 void drawEndState(Graphics g) {
 	g.setColor(Color.RED);
 	g.fillRect(0, 0, GameRunner.WIDTH, GameRunner.HEIGHT);
@@ -190,7 +201,10 @@ void drawWinState(Graphics g) {
 	g.fillRect(0, 0, GameRunner.WIDTH, GameRunner.HEIGHT);
 	g.setFont(win);
 	g.setColor(Color.BLACK);
-	g.drawString("Winner Winner Chicken Dinner", 150, 200);
+	g.drawString("Winner Winner Chicken Dinner", 220, 30);
+	g.drawString("You are the god of Lorax Clicker", 210, 60);
+	g.drawString("Press ENTER to restart", 270, 90);
+	superLorax.draw(g);
 }
 void startGame() {
 	timer.start();
@@ -218,6 +232,7 @@ otherTimer=0;
 idkTimer=0;
 i=16;
 taxGuyVisit=15000;
+message=false;
 }
 else if(currentState==WIN_STATE) {
 	drawWinState(g);
@@ -249,13 +264,16 @@ public void keyPressed(KeyEvent e) {
 		if (currentState == MENU_STATE) {
 			currentState = GAME_STATE;
 		}
+		if (currentState == END_STATE) {
+			currentState = MENU_STATE;
+		}
+		if (currentState == WIN_STATE) {
+			currentState = MENU_STATE;
+		}
 		}
 	else if(e.getKeyCode()==KeyEvent.VK_BACK_SLASH) {
 		score+=1000;
 	}
-		else if (currentState == END_STATE) {
-			currentState = MENU_STATE;
-		}
 	else if (e.getKeyCode()==KeyEvent.VK_SPACE) {
 		drawTree=false;
 		drawTree2=true;
@@ -264,6 +282,9 @@ public void keyPressed(KeyEvent e) {
 		JOptionPane.showMessageDialog(null, "Press Space to mine the rock, and upgrade your whacking power with upgrades shown on the next screen.  Do not become broke due to taxes, or you lose.");
 	}
 }
+private void playSound(String pow) {
+	sound.play();
+}
 @Override
 public void keyReleased(KeyEvent e) {
 	// TODO Auto-generated method stub
@@ -271,6 +292,7 @@ public void keyReleased(KeyEvent e) {
 		drawTree=true;
 		drawTree2=false;
 		score+=addedScore;
+		playSound("pow.wav");
 	}
 	else if(e.getKeyCode()==KeyEvent.VK_A) {
 		auto+=1;
