@@ -41,12 +41,15 @@ long idkTimer=0;
 int taxGuyVisit=15000;
 int second=1000;
 int i=16;
-int score=45;
-int taxAmount=45;
+int score=50;
+int taxAmount;
 int addedScore=1;
 int moreProductionPrice=50;
 int auto=0;
 int autoPrice=30;
+int percent;
+int tax=45;
+int times5=5;
 boolean doubleTree=false;
 int doubleTreePrice=200;
 Font font;
@@ -60,6 +63,7 @@ Font upgradeP;
 Font upgradeD;
 Font D;
 Font win;
+Font restart;
 Lorax lorax=new Lorax(250, 200, 100, 100);
 Tree tree=new Tree(220, 20, 200, 200);
 Rock rock=new Rock(350, 200, 200, 100);
@@ -87,6 +91,7 @@ GamePanel(){
 	upgradeD=new Font("Arial", Font.BOLD, 14);
 	D=new Font("Arial", Font.BOLD, 14);
 	win=new Font("Arial", Font.BOLD, 24);
+	restart=new Font("Arial", Font.BOLD, 14);
     try {
         loraxImg = ImageIO.read(this.getClass().getResourceAsStream("lorax.png"));
         rockImg = ImageIO.read(this.getClass().getResourceAsStream("rock.png"));
@@ -128,11 +133,13 @@ void drawMenuState(Graphics g) {
 }
 void drawGameState(Graphics g) {
 	GameRunner.frame.pack();
+	percent=score/10;
 	if(message==false) {
 	if(score>=50000) {
 		System.out.println("You win. You are the god of Lorax Clicker");
 		message=true;
 		currentState=WIN_STATE;
+		taxGuy.x=800;
 	}
 	}
 	g.setColor(Color.GREEN);
@@ -163,8 +170,10 @@ if (System.currentTimeMillis() - taxTimer >= taxGuyVisit) {
 if (System.currentTimeMillis() - otherTimer >= taxGuyVisit+3000) {
 	taxGuy.x+=200;
 	otherTimer = taxTimer;
+	taxAmount=tax+percent;
 	score-=taxAmount;
-	taxAmount+=5;
+	tax+=times5;
+	times5+=5;
 	if(score<0) {
 		currentState=END_STATE;
 	}
@@ -203,7 +212,8 @@ void drawWinState(Graphics g) {
 	g.setColor(Color.BLACK);
 	g.drawString("Winner Winner Chicken Dinner", 220, 30);
 	g.drawString("You are the god of Lorax Clicker", 210, 60);
-	g.drawString("Press ENTER to restart", 270, 90);
+	g.setFont(restart);
+	g.drawString("Press ENTER to restart, with no point limit.  Restart the program if you would like to win again", 100, 90);
 	superLorax.draw(g);
 }
 void startGame() {
@@ -219,8 +229,8 @@ drawGameState(g);
 }
 else if(currentState == END_STATE){
 drawEndState(g);
-score=45;
-taxAmount=45;
+score=50;
+tax=45;
 addedScore=1;
 moreProductionPrice=50;
 auto=0;
@@ -236,6 +246,19 @@ message=false;
 }
 else if(currentState==WIN_STATE) {
 	drawWinState(g);
+	score=50;
+	tax=45;
+	addedScore=1;
+	moreProductionPrice=50;
+	auto=0;
+	autoPrice=30;
+	doubleTreePrice=200;
+	doubleTree=false;
+	taxTimer=0;
+	otherTimer=0;
+	idkTimer=0;
+	i=16;
+	taxGuyVisit=15000;
 }
 }
 @Override
@@ -279,34 +302,36 @@ public void keyPressed(KeyEvent e) {
 		drawTree2=true;
 	}
 	else if(e.getKeyCode()==KeyEvent.VK_H) {
-		JOptionPane.showMessageDialog(null, "Press Space to mine the rock, and upgrade your whacking power with upgrades shown on the next screen.  Do not become broke due to taxes, or you lose.");
+		JOptionPane.showMessageDialog(null, "Press Space to mine the rock, and upgrade your whacking power with upgrades shown on the next screen.  Do not become broke due to taxes, or you lose.  Get at least 55 to pass the first round, and it will progessively get harder after.  Get 50,000 or more to win.");
 	}
 }
 private void playSound(String pow) {
+	sound.stop();
 	sound.play();
 }
 @Override
 public void keyReleased(KeyEvent e) {
 	// TODO Auto-generated method stub
-	if (e.getKeyCode()==KeyEvent.VK_SPACE) {
+	if (e.getKeyCode()==KeyEvent.VK_SPACE && currentState==GAME_STATE) {
 		drawTree=true;
 		drawTree2=false;
 		score+=addedScore;
 		playSound("pow.wav");
 	}
-	else if(e.getKeyCode()==KeyEvent.VK_A) {
-		auto+=1;
+	else if(e.getKeyCode()==KeyEvent.VK_A && currentState==GAME_STATE) {
+		auto+=2;
 		score-=autoPrice;
 		autoPrice+=10;
 	}
-	else if(e.getKeyCode()==KeyEvent.VK_P) {
+	else if(e.getKeyCode()==KeyEvent.VK_P && currentState==GAME_STATE) {
 		addedScore+=1;
 		score-=moreProductionPrice;
 		moreProductionPrice+=10;
 	}
-	else if(e.getKeyCode()==KeyEvent.VK_D) {
+	else if(e.getKeyCode()==KeyEvent.VK_D && currentState==GAME_STATE) {
 		if(doubleTree==false) {
 		addedScore*=2;
+		auto*=2;
 		doubleTree=true;
 		score-=doubleTreePrice;
 		}
