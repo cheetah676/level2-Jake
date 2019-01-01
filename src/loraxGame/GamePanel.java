@@ -26,6 +26,7 @@ import leagueInvaders.Rocketship;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	AudioClip sound = JApplet.newAudioClip(getClass().getResource("pow.wav"));
+	
 	final int MENU_STATE=0;
 	final int GAME_STATE=1;
 	final int END_STATE=2;

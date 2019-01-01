@@ -15,6 +15,7 @@ public class GameRunner {
 	void run() {
 GP=new GamePanel();
 frame=new JFrame();
+frame.setTitle("Lorax Clicker");
 frame.add(GP);
 frame.addKeyListener(GP); 
 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
