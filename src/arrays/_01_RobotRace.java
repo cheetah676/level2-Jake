@@ -10,10 +10,10 @@ public class _01_RobotRace {
 	//1. make a main method
 public static void main(String[]args) {
 	//2. create an array of 5 robots.
-Robot[] robotArray=new Robot[3];
+Robot[] robotArray=new Robot[10];
 for(int i=0; i<robotArray.length; i++) {
 	robotArray[i]=new Robot();
-robotArray[i].setSpeed(10);
+robotArray[i].setSpeed(100);
 	//3. use a for loop to initialize the robots.
 		//4. make each robot start at the bottom of the screen, side by side, facing up
 	robotArray[i].moveTo(e, 500);
@@ -25,8 +25,14 @@ boolean reachTop=false;
 while(!reachTop) {
 for(int i=0; i<robotArray.length; i++) {
 	if(robotArray[i].getY()>=0) {
-	int j=ran.nextInt(100);
+	int j=ran.nextInt(5);
 	robotArray[i].move(j);
+	if(j==0) {
+		robotArray[i].move(-12);
+	}
+	if(robotArray[i].getY()<=250) {
+		robotArray[i].move(100);
+	}
 	}
 	else {
 		reachTop=true;
@@ -48,7 +54,7 @@ for(int i=0; i<robotArray.length; i++) {
 	//8. try different races with different amounts of robots.
 
 	//9. make the robots race around a circular track.
-	}
+}
 }
 }
 
